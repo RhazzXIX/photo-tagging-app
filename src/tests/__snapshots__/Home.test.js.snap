@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home component Renders on screen 1`] = `
+<div>
+  <header>
+    <a
+      href="/"
+    >
+      Home
+    </a>
+    <a
+      href="/credits"
+    >
+      Credits
+    </a>
+  </header>
+  <footer>
+    <a
+      href="https://github.com/RhazzXIX"
+    >
+      <img
+        alt="GitHub"
+        src="gitW.png"
+      />
+    </a>
+  </footer>
+</div>
+`;
