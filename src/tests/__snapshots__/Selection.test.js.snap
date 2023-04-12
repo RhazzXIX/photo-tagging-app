@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Selection component Renders on screen 1`] = `
+<div>
+  <main>
+    <div>
+      <ul />
+      <img
+        alt=""
+        src=""
+      />
+      <p />
+    </div>
+    <div>
+      <ul />
+      <img
+        alt=""
+        src=""
+      />
+      <p />
+    </div>
+  </main>
+</div>
+`;
