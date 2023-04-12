@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FrontPage component Renders on screen 1`] = `
+<div>
+  <main
+    id="FrontPage"
+  >
+    <h1>
+      Seek & Click
+    </h1>
+    <button>
+      Play!
+    </button>
+    <img />
+    <p>
+      -----\`&gt;\`
+      <a
+        href="/kids"
+      >
+        Kids ver.
+      </a>
+    </p>
+  </main>
+</div>
+`;
