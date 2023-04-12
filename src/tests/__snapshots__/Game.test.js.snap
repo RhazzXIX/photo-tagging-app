@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Game component Renders on screen 1`] = `
+<div>
+  <main>
+    <header>
+      <ul>
+        <li>
+          <img
+            alt=""
+            src=""
+          />
+        </li>
+        <li>
+          <img
+            alt=""
+            src=""
+          />
+        </li>
+        <li>
+          <img
+            alt=""
+            src=""
+          />
+        </li>
+      </ul>
+    </header>
+    <section>
+      <img
+        alt=""
+        src=""
+      />
+    </section>
+  </main>
+</div>
+`;
