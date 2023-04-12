@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Leaderboard component Renders on screen 1`] = `
+<div>
+  <main>
+    <button>
+      Back to game
+    </button>
+    <button />
+    <button />
+    <section>
+      <header>
+        <p>
+          No.
+        </p>
+        <p>
+          Name
+        </p>
+        <p>
+          Time
+        </p>
+      </header>
+      <ul>
+        <li>
+          <div />
+        </li>
+      </ul>
+    </section>
+  </main>
+</div>
+`;
