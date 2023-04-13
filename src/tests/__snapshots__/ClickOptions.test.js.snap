@@ -5,17 +5,17 @@ exports[`ClickOptions component Renders on screen 1`] = `
   <ul>
     <li>
       <button>
-        Luffy
-      </button>
-    </li>
-    <li>
-      <button>
         Heli
       </button>
     </li>
     <li>
       <button>
         Poli
+      </button>
+    </li>
+    <li>
+      <button>
+        Luffy
       </button>
     </li>
   </ul>
