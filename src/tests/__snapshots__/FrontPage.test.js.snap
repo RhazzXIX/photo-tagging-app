@@ -11,9 +11,18 @@ exports[`FrontPage component Renders on screen 1`] = `
     <button>
       Play!
     </button>
-    <img />
+    <video
+      autoplay=""
+      loop=""
+      width="360px"
+    >
+      <source
+        src=""
+        type="video/webm"
+      />
+    </video>
     <p>
-      -----\`&gt;\`
+      -----&gt;  
       <a
         href="/kids"
       >
