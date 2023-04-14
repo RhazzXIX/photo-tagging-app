@@ -26,10 +26,10 @@ exports[`Game component Renders on screen 1`] = `
       </ul>
     </header>
     <section>
-      <img
-        alt=""
-        src=""
-      />
+      <img />
+    </section>
+    <section>
+      <img />
     </section>
   </main>
 </div>
