@@ -21,7 +21,7 @@
     "deploy": "gh-pages -d -build",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --detectOpenHandles",
     "eject": "react-scripts eject",
     "getLogs": "git log --oneline --abbrev-commit --all --graph --decorate"
   },

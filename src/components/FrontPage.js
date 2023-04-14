@@ -4,8 +4,11 @@ import { storage } from "../assists/fbConfig";
 import { useEffect, useRef, useState } from "react";
 
 export default function FrontPage(props) {
+  const { version } = props;
   const [vidSrc, setVidSrc] = useState();
   let storageVidLoc = "gameMap/chopper-hiding.webm";
+
+  if (version) storageVidLoc = "kidsMap/george hiding.webm";
 
   useEffect(() => {
     const vidRef = ref(storage, storageVidLoc);
@@ -21,10 +24,14 @@ export default function FrontPage(props) {
       <video width={"360px"} key={vidSrc} autoPlay loop muted>
         <source src={vidSrc} type="video/webm" />
       </video>
-      <p>
-        -----&gt; &nbsp;
-        <Link to="kids">Kids ver.</Link>
-      </p>
+      {version !== "kids" ? (
+        <p>
+          -----&gt; &nbsp;
+          <Link to="kids">Kids ver.</Link>
+        </p>
+      ) : (
+        <Link to="/photo-tagging-app">Back to normal ver.</Link>
+      )}
     </main>
   );
 }
