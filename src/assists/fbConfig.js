@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 
 const fbAPP = initializeApp({
   apiKey: "AIzaSyD3iQ-Ymc_2B5SAPyYQdoOHKc12UH3p5tQ",
@@ -11,7 +12,10 @@ const fbAPP = initializeApp({
   measurementId: "G-JSFBSH54XH",
 });
 
-
 const storage = getStorage(fbAPP);
 
-export { storage };
+const database = getFirestore(fbAPP);
+
+const fireStore = getFirestore(fbAPP);
+
+export { storage, database };
