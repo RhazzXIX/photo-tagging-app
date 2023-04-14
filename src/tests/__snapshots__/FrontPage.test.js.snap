@@ -17,7 +17,6 @@ exports[`FrontPage component Renders on screen 1`] = `
       width="360px"
     >
       <source
-        src=""
         type="video/webm"
       />
     </video>
