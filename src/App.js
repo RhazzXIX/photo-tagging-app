@@ -1,6 +1,7 @@
-import FrontPage from "./components/FrontPage";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import FrontPage from "./components/FrontPage";
 import Home from "./components/Home";
+import Game from "./components/Game";
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,14 @@ const router = createBrowserRouter([
       {
         path: "kids",
         element: <FrontPage key={"kids"} version={"kids"} />,
+      },
+      {
+        path: "game",
+        element: <Game key={"normal"} />,
+      },
+      {
+        path: "kids/game",
+        element: <Game key={"kids"} version={"kids"} />,
       },
     ],
   },

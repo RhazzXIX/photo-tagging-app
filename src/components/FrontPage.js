@@ -20,7 +20,7 @@ export default function FrontPage(props) {
   return (
     <main id="FrontPage">
       <h1>Seek & Click</h1>
-      <button>Play!</button>
+      <Link to={'game'}><button>Play!</button></Link>
       <video width={"360px"} key={vidSrc} autoPlay loop muted>
         <source src={vidSrc} type="video/webm" />
       </video>
