@@ -8,7 +8,7 @@ import useGameData from "../assists/useGameData";
 export default function Game(props) {
   const [showFirstMap, setShowFirstMap] = useState(true);
   const [showScndMap, setShowScndmap] = useState(true);
-  const { firstMap, scndMap } = useGameData();
+  const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
 
   return (
     <main>
@@ -17,15 +17,14 @@ export default function Game(props) {
         <section>
           <header>
             <ul>
-              <li>
-                <img src="" alt="" />
-              </li>
-              <li>
-                <img src="" alt="" />
-              </li>
-              <li>
-                <img src="" alt="" />
-              </li>
+              {charSelection1.map((char) => {
+                return (
+                  <li key={char.name}>
+                    <img src={char.url} alt={char.name} />
+                    <p>{char.name}</p>
+                  </li>
+                );
+              })}
             </ul>
           </header>
           <img src={firstMap.url} alt={firstMap.name} />
@@ -35,15 +34,14 @@ export default function Game(props) {
         <section>
           <header>
             <ul>
-              <li>
-                <img src="" alt="" />
-              </li>
-              <li>
-                <img src="" alt="" />
-              </li>
-              <li>
-                <img src="" alt="" />
-              </li>
+              {charSelection2.map((char) => {
+                return (
+                  <li key={char.name}>
+                    <img src={char.url} alt={char.name} />
+                    <p>{char.name}</p>
+                  </li>
+                );
+              })}
             </ul>
           </header>
           <img src={scndMap.url} alt={scndMap.name} />
