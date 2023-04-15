@@ -1,20 +1,38 @@
-export default function Selection (props) {
+import useGameData from "../assists/useGameData";
+
+export default function Selection(props) {
+  const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
+
   return (
-    <main>
+    <section>
       <div>
         <ul>
-          
+          {charSelection1.map((char) => {
+            return (
+              <li key={char.name}>
+                <img src={char.url} alt={char.name} />
+                <p>{char.name}</p>
+              </li>
+            );
+          })}
         </ul>
-        <img src="" alt="" />
-        <p></p>
+        <img src={firstMap.url} alt={firstMap.name} />
+        <p>{firstMap.name}</p>
       </div>
       <div>
         <ul>
-          
+          {charSelection2.map((char) => {
+            return (
+              <li key={char.name}>
+                <img src={char.url} alt={char.name} />
+                <p>{char.name}</p>
+              </li>
+            );
+          })}
         </ul>
-        <img src="" alt="" />
-        <p></p>
+        <img src={scndMap.url} alt={scndMap.name} />
+        <p>{scndMap.name}</p>
       </div>
-    </main>
-  )
+    </section>
+  );
 }

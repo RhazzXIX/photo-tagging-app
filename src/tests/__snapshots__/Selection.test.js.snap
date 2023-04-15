@@ -2,23 +2,17 @@
 
 exports[`Selection component Renders on screen 1`] = `
 <div>
-  <main>
+  <section>
     <div>
       <ul />
-      <img
-        alt=""
-        src=""
-      />
+      <img />
       <p />
     </div>
     <div>
       <ul />
-      <img
-        alt=""
-        src=""
-      />
+      <img />
       <p />
     </div>
-  </main>
+  </section>
 </div>
 `;
