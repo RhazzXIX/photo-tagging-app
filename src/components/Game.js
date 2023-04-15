@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { database } from "../assists/fbConfig";
+import { database, storage } from "../assists/fbConfig";
+import { getDownloadURL, ref } from "firebase/storage";
 import { getDoc, doc, collection } from "firebase/firestore";
 
 export default function Game(props) {
@@ -12,14 +13,24 @@ export default function Game(props) {
   const selection2Ref = doc(database, "game", "game");
 
   const getData = async () => {
+    const firstMapData = {};
+    const scndMapData = {};
     const data1 = await getDoc(selction1Ref).then((response) =>
       response.data()
     );
+    firstMapData.name = data1.map.name;
+    await getDownloadURL(ref(storage, data1.map.imgRef)).then(
+      (url) => (firstMapData.url = url)
+    );
+    setFirstmap(firstMapData);
     const data2 = await getDoc(selection2Ref).then((response) =>
       response.data()
     );
-    setFirstmap(data1.map);
-    setScndMap(data2.map);
+    scndMapData.name = data2.map.name;
+    await getDownloadURL(ref(storage, data2.map.imgRef)).then(
+      (url) => (scndMapData.url = url)
+    );
+    setScndMap(scndMapData);
   };
 
   useEffect(() => {
