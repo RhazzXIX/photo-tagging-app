@@ -5,24 +5,40 @@ exports[`FrontPage component Renders on screen 1`] = `
   <main
     id="FrontPage"
   >
-    <h1>
-      Seek & Click
-    </h1>
-    <button>
-      Play!
-    </button>
+    <div
+      id="hContainer"
+    >
+      <h1>
+        Seek
+      </h1>
+      <h1>
+        &
+      </h1>
+      <h1>
+        Click
+      </h1>
+    </div>
+    <a
+      href="/game"
+    >
+      <button>
+        Play!
+      </button>
+    </a>
     <video
       autoplay=""
       loop=""
-      width="360px"
+      width="400px"
     >
       <source
+        data-testid="vidSrc"
         type="video/webm"
       />
     </video>
     <p>
       -----&gt;  
       <a
+        class="version"
         href="/kids"
       >
         Kids ver.

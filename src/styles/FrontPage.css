@@ -1,0 +1,68 @@
+main#FrontPage {
+  flex: auto;
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
+  align-items: center;
+  background-color: rgb(88, 17, 88);
+}
+
+div#hContainer {
+  width: 280px;
+  height: 200px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  color: rgb(88, 17, 88);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+}
+
+div#hContainer h1 {
+  font-size: 3rem;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  letter-spacing: 2px;
+}
+
+main#FrontPage > video {
+  grid-column: 2 / 3;
+  grid-row: 1 / -1;
+  border-radius: 8px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+main#FrontPage > p,
+a.version {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+
+main#FrontPage > a button {
+  font-size: 3rem;
+  font-weight: 700;
+  padding: 4px 50px;
+  border-radius: 50px;
+  border: 2px solid black;
+  background-color: pink;
+  color: yellow;
+  font-family: Georgia, "Times New Roman", Times, serif;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+main#FrontPage > a button:hover {
+  box-shadow: 0 0 10px white;
+}
+
+main#FrontPage > a button:active {
+  background-color: aliceblue;
+  color: rgb(88, 17, 88);
+}
+
+a.version:visited {
+  color: blue;
+}

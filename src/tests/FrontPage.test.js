@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { screen, render } from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { BrowserRouter } from "react-router-dom";
 import FrontPage from "../components/FrontPage";
@@ -22,7 +22,10 @@ describe("FrontPage component", () => {
         <FrontPage />
       </BrowserRouter>
     );
-    expect(screen.getByRole("link").textContent).toEqual("Kids ver.");
+    expect(screen.getByRole("link", { name: "Kids ver." })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Back to normal ver." })
+    ).not.toBeInTheDocument();
 
     rerender(
       <BrowserRouter>
@@ -30,6 +33,28 @@ describe("FrontPage component", () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByRole("link").textContent).toEqual("Back to normal ver.");
+    expect(
+      screen.getByRole("link", { name: "Back to normal ver." })
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Kids ver." })
+    ).not.toBeInTheDocument();
+  });
+
+  it("Can fetch videos from the backend", async () => {
+    render(
+      <BrowserRouter>
+        <FrontPage />
+      </BrowserRouter>
+    );
+    expect(screen.getByTestId("vidSrc").src).toBe("");
+    await waitFor(
+      () => {
+        if (screen.getByTestId("vidSrc").src === "")
+          throw new Error("Not able to fetch video source");
+        return expect(screen.getByTestId("vidSrc").src).toMatch(/https/i);
+      },
+      { timeout: 2000 }
+    );
   });
 });
