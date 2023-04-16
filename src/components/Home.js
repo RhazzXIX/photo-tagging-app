@@ -1,5 +1,6 @@
 import { Link, Outlet } from "react-router-dom"
 import ghLogo from '../assets/gitW.png'
+import '../styles/Home.css'
 
 export default function Home (props) {
   return(
