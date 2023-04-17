@@ -1,0 +1,51 @@
+main#game {
+  position: relative;
+  flex: auto;
+  background-color: #2b2c5a;
+  min-width: max-content;
+}
+
+section.map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+section.map
+header {
+  position: sticky;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.4);
+  padding: 4px;
+  width: 100%;
+}
+
+section.map
+ul {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+}
+
+section.map
+ul li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+section.map
+ul li:first-of-type {
+  justify-self: end;
+}
+
+section.map
+ul li:last-of-type {
+  justify-self: start;
+}
+
+section.map
+img {
+  max-width: 1830px;
+}
