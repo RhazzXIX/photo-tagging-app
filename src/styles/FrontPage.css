@@ -5,20 +5,21 @@ main#FrontPage {
   grid-template-columns: 1fr 1fr;
   justify-items: center;
   align-items: center;
-  background-color: rgb(88, 17, 88);
+  background-color: #2b2c5a;
 }
 
 div#hContainer {
-  width: 280px;
+  width: 320px;
   height: 200px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
-  color: rgb(88, 17, 88);
+  color: #2b2c5a;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 6px;
+  padding: 0 18px;
+  box-shadow: 0 0 8px rgb(197, 197, 197);
 }
 
 div#hContainer h1 {
@@ -27,18 +28,28 @@ div#hContainer h1 {
   letter-spacing: 2px;
 }
 
+div#hContainer h1:nth-of-type(2) {
+  align-self: center;
+}
+
+div#hContainer h1:nth-of-type(3) {
+  align-self: flex-end;
+}
+
 main#FrontPage > video {
   grid-column: 2 / 3;
   grid-row: 1 / -1;
   border-radius: 8px;
   padding: 8px;
   background-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 8px rgb(197, 197, 197);
 }
 
 main#FrontPage > p,
 a.version {
   grid-column: 2 / 3;
   grid-row: 2 / 3;
+  color: yellow;
 }
 
 main#FrontPage > a button {
@@ -47,7 +58,7 @@ main#FrontPage > a button {
   padding: 4px 50px;
   border-radius: 50px;
   border: 2px solid black;
-  background-color: pink;
+  background-color: purple;
   color: yellow;
   font-family: Georgia, "Times New Roman", Times, serif;
   letter-spacing: 2px;
@@ -60,9 +71,5 @@ main#FrontPage > a button:hover {
 
 main#FrontPage > a button:active {
   background-color: aliceblue;
-  color: rgb(88, 17, 88);
-}
-
-a.version:visited {
-  color: blue;
+  color: #2b2c5a;
 }
