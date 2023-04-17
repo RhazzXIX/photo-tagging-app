@@ -29,6 +29,9 @@ export default function useGameData(props) {
     await getDownloadURL(ref(storage, data1.map.imgRef)).then(
       (url) => (firstMapData.url = url)
     );
+    await getDownloadURL(ref(storage, data1.map.miniImgRef)).then((url) => {
+      firstMapData.miniUrl = url;
+    });
     setFirstmap(firstMapData);
     char1.name = data1.char1.name;
     await getDownloadURL(ref(storage, data1.char1.imgRef)).then(
@@ -51,6 +54,9 @@ export default function useGameData(props) {
     await getDownloadURL(ref(storage, data2.map.imgRef)).then(
       (url) => (scndMapData.url = url)
     );
+    await getDownloadURL(ref(storage, data2.map.miniImgRef)).then((url) => {
+      scndMapData.miniUrl = url;
+    });
     setScndMap(scndMapData);
     char4.name = data2.char1.name;
     await getDownloadURL(ref(storage, data2.char1.imgRef)).then(
