@@ -2,6 +2,7 @@ import "@testing-library/jest-dom";
 import useGameData from "../assists/useGameData";
 import { render } from "@testing-library/react";
 import Selection from "../components/Selection";
+import { BrowserRouter } from "react-router-dom";
 
 const fetchedData = {
   firstMap: {
@@ -50,7 +51,11 @@ jest.mock("../assists/useGameData", () => {
 
 describe("Selection component", () => {
   it("Renders on screen", () => {
-    const { container } = render(<Selection />);
+    const { container } = render(
+      <BrowserRouter>
+        <Selection />
+      </BrowserRouter>
+    );
     expect(container).toMatchSnapshot();
   });
 });
