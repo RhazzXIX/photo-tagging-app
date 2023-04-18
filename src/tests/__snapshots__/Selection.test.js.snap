@@ -2,16 +2,98 @@
 
 exports[`Selection component Renders on screen 1`] = `
 <div>
-  <section>
-    <div>
-      <ul />
-      <img />
-      <p />
-    </div>
-    <div>
-      <ul />
-      <img />
-      <p />
+  <section
+    id="selection"
+  >
+    <div
+      class="cardContainer"
+    >
+      <div
+        class="card"
+      >
+        <ul>
+          <li>
+            <img
+              alt="Yato \\"Yaboku\\""
+              class="chars"
+              src="yato url"
+            />
+            <p>
+              Yato "Yaboku"
+            </p>
+          </li>
+          <li>
+            <img
+              alt="ELUCIA\\""
+              class="chars"
+              src="elucia url"
+            />
+            <p>
+              ELUCIA"
+            </p>
+          </li>
+          <li>
+            <img
+              alt="EVANS\\""
+              class="chars"
+              src="evans url"
+            />
+            <p>
+              EVANS"
+            </p>
+          </li>
+        </ul>
+        <img
+          alt="Anime Crossover"
+          src="mini url 1"
+        />
+        <button>
+          Anime Crossover
+        </button>
+      </div>
+      <div
+        class="card"
+      >
+        <ul>
+          <li>
+            <img
+              alt="Spyro"
+              class="chars"
+              src="spyro url"
+            />
+            <p>
+              Spyro
+            </p>
+          </li>
+          <li>
+            <img
+              alt="Arthur\\""
+              class="chars"
+              src="arthur url"
+            />
+            <p>
+              Arthur"
+            </p>
+          </li>
+          <li>
+            <img
+              alt="Marco\\""
+              class="chars"
+              src="marco url"
+            />
+            <p>
+              Marco"
+            </p>
+          </li>
+        </ul>
+        <img
+          alt="Game Crossover"
+          src="mini url 2"
+        />
+        <button>
+          Game Crossover
+        </button>
+      </div>
     </div>
   </section>
 </div>
