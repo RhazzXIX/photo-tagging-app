@@ -2,31 +2,12 @@
 
 exports[`Game component Renders on screen 1`] = `
 <div>
-  <main>
-    <section>
-      <div>
-        <ul />
-        <img />
-        <p />
-      </div>
-      <div>
-        <ul />
-        <img />
-        <p />
-      </div>
-    </section>
-    <section>
-      <header>
-        <ul />
-      </header>
-      <img />
-    </section>
-    <section>
-      <header>
-        <ul />
-      </header>
-      <img />
-    </section>
+  <main
+    id="game"
+  >
+    <header>
+      <ul />
+    </header>
   </main>
 </div>
 `;
