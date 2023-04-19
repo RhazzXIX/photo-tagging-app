@@ -8,6 +8,13 @@ exports[`Game component Renders on screen 1`] = `
     <header>
       <ul />
     </header>
+    <section
+      id="loading"
+    >
+      <h1>
+        Loading.
+      </h1>
+    </section>
   </main>
 </div>
 `;
