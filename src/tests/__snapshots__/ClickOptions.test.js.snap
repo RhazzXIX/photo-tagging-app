@@ -2,7 +2,9 @@
 
 exports[`ClickOptions component Renders on screen 1`] = `
 <div>
-  <ul>
+  <ul
+    style="position: absolute; top: 5px; left: 5px;"
+  >
     <li>
       <button>
         Heli

@@ -34,12 +34,14 @@ describe("ClickOptions component", () => {
   });
 
   it("Renders on screen", () => {
-    const { container } = render(<ClickOptions selections={selections} />);
+    const { container } = render(
+      <ClickOptions selections={selections} position={{}} />
+    );
     expect(container).toMatchSnapshot();
   });
 
   it("The button activates the appropriate functions of each selection", async () => {
-    render(<ClickOptions selections={selections} />);
+    render(<ClickOptions selections={selections} position={{}} />);
     const buttons = screen.getAllByRole("button");
 
     await user.click(buttons[2]);
@@ -55,14 +57,16 @@ describe("ClickOptions component", () => {
   });
 
   it("Doesn't render the button of a found character", async () => {
-    const { rerender } = render(<ClickOptions selections={selections} />);
+    const { rerender } = render(
+      <ClickOptions selections={selections} position={{}} />
+    );
     const luffyBtn = screen.getByRole("button", { name: "Luffy" });
     let buttons = screen.getAllByRole("button");
 
     expect(buttons).toHaveLength(3);
 
     await user.click(luffyBtn);
-    rerender(<ClickOptions selections={selections} />);
+    rerender(<ClickOptions selections={selections} position={{}} />);
     buttons = screen.getAllByRole("button");
 
     expect(
