@@ -20,7 +20,7 @@ section#loading {
   background-color: white;
 }
 
-main#game header {
+main#game > header {
   position: sticky;
   top: 0;
   background-color: rgba(255, 255, 255, 0.4);
@@ -28,12 +28,12 @@ main#game header {
   width: 100%;
 }
 
-main#game ul {
+main#game > header ul {
   display: grid;
   grid-template-columns: repeat(3, auto);
 }
 
-main#game ul li {
+main#game > header ul li {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -41,15 +41,33 @@ main#game ul li {
   gap: 4px;
 }
 
-main#game ul li:first-of-type {
+main#game > header ul li:first-of-type {
   justify-self: end;
 }
 
-main#game ul li:last-of-type {
+main#game > header ul li:last-of-type {
   justify-self: start;
 }
 
 main#game img {
   max-width: 1830px;
   flex: auto;
+  cursor: crosshair;
 }
+
+section#map {
+  position: relative;
+}
+
+/* div#target {
+  min-width: 50px;
+  min-height: 50px;
+  border: 2px dashed white;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: crosshair;
+} */
