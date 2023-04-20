@@ -2,11 +2,15 @@ import "../styles/Game.css";
 import useGameData from "../assists/useGameData";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import ClickOptions from './ClickOptions'
 
 export default function Game(props) {
   const { gameVer } = useParams();
   const [showLoading, setShowLoading] = useState(true);
   const [loading, setLoading] = useState("Loading.");
+  const [showButtons, setShowButtons] = useState(false);
+  const [targetPosX, setTargetPosX] = useState(915);
+  const [targetPosY, setTargetPosY] = useState(440);
 
   const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
 
@@ -43,6 +47,25 @@ export default function Game(props) {
     setShowLoading(false);
   };
 
+  const handleClick = (e) => {
+    const xPos = e.nativeEvent.offsetX
+    const yPos = e.nativeEvent.offsetY
+    setTargetPosX(xPos)
+    setTargetPosY(yPos)
+    if (showButtons) {
+      setShowButtons(false)
+      return
+    }
+    setShowButtons(true);
+  };
+
+  // const getMousePosition = (e) => {
+  //   const xPos = e.nativeEvent.offsetX 
+  //   const yPos = e.nativeEvent.offsetY
+  //   setTargetPosX(xPos)
+  //   setTargetPosY(yPos)
+  // }
+
   useEffect(() => {
     const editLoadingInterval = setInterval(() => {
       editLoading();
@@ -61,7 +84,7 @@ export default function Game(props) {
             charSelection.map((char, i) => {
               if (i === charSelection.length - 1)
                 return (
-                  <li key={char.name}>
+                  <li key={char.id}>
                     <img
                       src={char.url}
                       alt={char.name}
@@ -72,7 +95,7 @@ export default function Game(props) {
                   </li>
                 );
               return (
-                <li key={char.name}>
+                <li key={char.id}>
                   <img src={char.url} alt={char.name} className="chars" />
                   <p>{char.name}</p>
                 </li>
@@ -80,7 +103,24 @@ export default function Game(props) {
             })}
         </ul>
       </header>
-      {map && <img src={map.url} alt={map.name} />}
+      {map && (
+        <section id="map" onClick={handleClick} data-testid='map'
+        //  onMouseOver={getMousePosition}
+         >
+          <img src={map.url} alt={map.name} />
+           {/* <div
+            id="target"
+            style={{
+              position: "absolute",
+              left: targetPosX,
+              top: targetPosY,
+            }}
+          >✛</div>  */}
+      {showButtons &&
+        <ClickOptions selections={charSelection} position={{targetPosX, targetPosY}}/>
+      }
+        </section>
+      )}
       {showLoading && (
         <section id="loading">
           <h1>{loading}</h1>
