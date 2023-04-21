@@ -2,7 +2,7 @@ import "../styles/Game.css";
 import useGameData from "../assists/useGameData";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import ClickOptions from './ClickOptions'
+import ClickOptions from "./ClickOptions";
 
 export default function Game(props) {
   const { gameVer } = useParams();
@@ -11,6 +11,8 @@ export default function Game(props) {
   const [showButtons, setShowButtons] = useState(false);
   const [targetPosX, setTargetPosX] = useState(915);
   const [targetPosY, setTargetPosY] = useState(440);
+  const [timer, setTimer] = useState(0);
+  const [runTimer, setRunTimer] = useState(false);
 
   const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
 
@@ -45,22 +47,23 @@ export default function Game(props) {
 
   const removeLoading = (e) => {
     setShowLoading(false);
+    setRunTimer(true);
   };
 
   const handleClick = (e) => {
-    const xPos = e.nativeEvent.offsetX
-    const yPos = e.nativeEvent.offsetY
-    setTargetPosX(xPos)
-    setTargetPosY(yPos)
+    const xPos = e.nativeEvent.offsetX;
+    const yPos = e.nativeEvent.offsetY;
+    setTargetPosX(xPos);
+    setTargetPosY(yPos);
     if (showButtons) {
-      setShowButtons(false)
-      return
+      setShowButtons(false);
+      return;
     }
     setShowButtons(true);
   };
 
   // const getMousePosition = (e) => {
-  //   const xPos = e.nativeEvent.offsetX 
+  //   const xPos = e.nativeEvent.offsetX
   //   const yPos = e.nativeEvent.offsetY
   //   setTargetPosX(xPos)
   //   setTargetPosY(yPos)
@@ -76,9 +79,34 @@ export default function Game(props) {
     };
   }, [loading]);
 
+  useEffect(() => {
+    let gameTimer;
+    if (runTimer) {
+      gameTimer = setInterval(() => {
+        setTimer(timer + 1);
+      }, 1);
+    }
+    if (!runTimer) clearInterval(gameTimer);
+    return () => {
+      clearInterval(gameTimer);
+    };
+  }, [timer, runTimer]);
+
   return (
     <main id="game">
       <header>
+        <div className="timer">
+          <p>{Math.floor(timer / 1000 / 60)}m</p>
+          <p>
+            {Math.floor(
+              (timer / 1000 / 60 - Math.floor(timer / 1000 / 60)) * 60
+            )}
+            s
+          </p>
+          <p>
+            {Math.floor((timer / 1000 - Math.floor(timer / 1000)) * 1000)}ms
+          </p>
+        </div>
         <ul>
           {charSelection &&
             charSelection.map((char, i) => {
@@ -104,11 +132,14 @@ export default function Game(props) {
         </ul>
       </header>
       {map && (
-        <section id="map" onClick={handleClick} data-testid='map'
-        //  onMouseOver={getMousePosition}
-         >
+        <section
+          id="map"
+          onClick={handleClick}
+          data-testid="map"
+          //  onMouseOver={getMousePosition}
+        >
           <img src={map.url} alt={map.name} />
-           {/* <div
+          {/* <div
             id="target"
             style={{
               position: "absolute",
@@ -116,9 +147,12 @@ export default function Game(props) {
               top: targetPosY,
             }}
           >✛</div>  */}
-      {showButtons &&
-        <ClickOptions selections={charSelection} position={{targetPosX, targetPosY}}/>
-      }
+          {showButtons && (
+            <ClickOptions
+              selections={charSelection}
+              position={{ targetPosX, targetPosY }}
+            />
+          )}
         </section>
       )}
       {showLoading && (

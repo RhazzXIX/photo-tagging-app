@@ -121,6 +121,39 @@ describe("Game component", () => {
     });
   });
 
+  it("Starts the time after the game loads", async () => {
+    let delay = 0;
+    const router = createMemoryRouter(routes, {
+      initialEntries: ["/game/gameX"],
+    });
+
+    render(<RouterProvider router={router} />);
+    const ms = screen.getByText("0ms");
+    const marcoImg = screen.getByAltText(/marco/i);
+    expect(
+      screen.getByRole("heading", { name: /loading/i })
+    ).toBeInTheDocument();
+
+    await waitFor(() => {
+      if (delay === 0) {
+        delay += 1;
+        throw new Error("Did not delay");
+      }
+      expect(ms.textContent).toMatch("0ms");
+    });
+    fireEvent.load(marcoImg);
+    await waitFor(() => {
+      if (delay === 1) {
+        delay += 1;
+        throw new Error("Did not delay");
+      }
+    });
+    expect(
+      screen.queryByRole("heading", { name: /loading/i })
+    ).not.toBeInTheDocument();
+    expect(ms.textContent).not.toMatch("0ms");
+  });
+
   it("Reveals the character buttons when the map is cliked", async () => {
     const router = createMemoryRouter(routes, {
       initialEntries: ["/game/gameX"],

@@ -6,6 +6,22 @@ exports[`Game component Renders on screen 1`] = `
     id="game"
   >
     <header>
+      <div
+        class="timer"
+      >
+        <p>
+          0
+          m
+        </p>
+        <p>
+          0
+          s
+        </p>
+        <p>
+          0
+          ms
+        </p>
+      </div>
       <ul />
     </header>
     <section
