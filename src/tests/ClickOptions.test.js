@@ -5,7 +5,7 @@ import ClickOptions from "../components/ClickOptions";
 
 const luffy = {
   name: "Luffy",
-  fn(e) {
+  checkPosn(e) {
     this.isFound = true;
   },
   id: 1,
@@ -15,15 +15,24 @@ const luffy = {
 const selections = [
   {
     name: "Heli",
-    fn: jest.fn(),
+    checkPosn: jest.fn(),
     id: 2,
   },
   {
     name: "Poli",
-    fn: jest.fn(),
+    checkPosn: jest.fn(),
     id: 3,
   },
 ];
+
+const handleClick = jest.fn();
+
+let testObj;
+
+async function handleClick2(e) {
+  testObj = this;
+  this.checkPosn();
+}
 
 const user = userEvent.setup();
 
@@ -31,34 +40,87 @@ describe("ClickOptions component", () => {
   beforeEach(() => {
     luffy.isFound = false;
     selections.push(luffy);
+    handleClick.mockClear();
   });
 
   it("Renders on screen", () => {
     const { container } = render(
-      <ClickOptions selections={selections} position={{}} />
+      <ClickOptions
+        selections={selections}
+        position={{}}
+        handleClick={handleClick}
+      />
     );
     expect(container).toMatchSnapshot();
   });
 
-  it("The button activates the appropriate functions of each selection", async () => {
-    render(<ClickOptions selections={selections} position={{}} />);
+  it("Changes style position based on passed position props", () => {
+    const { rerender } = render(
+      <ClickOptions
+        selections={selections}
+        position={{}}
+        handleClick={handleClick2}
+      />
+    );
+    let list = screen.getByRole("list");
+    expect(list).toHaveStyle("top: 5px");
+    expect(list).toHaveStyle("left: 5px");
+    rerender(
+      <ClickOptions
+        selections={selections}
+        position={{ targetPosY: 5, targetPosX: 5 }}
+        handleClick={handleClick2}
+      />
+    );
+
+    expect(list).toHaveStyle("top: 10px");
+    expect(list).toHaveStyle("left: 10px");
+  });
+
+  it("Calls the passed onClick function", async () => {
+    render(
+      <ClickOptions
+        selections={selections}
+        position={{}}
+        handleClick={handleClick}
+      />
+    );
+    const luffyBtn = screen.getByRole("button", { name: "Luffy" });
+
+    expect(handleClick).not.toHaveBeenCalled();
+
+    await user.click(luffyBtn);
+
+    expect(handleClick).toHaveBeenCalled();
+  });
+
+  it("The button passes the appropriate character Obj to the click handle", async () => {
+    render(
+      <ClickOptions
+        selections={selections}
+        position={{}}
+        handleClick={handleClick2}
+      />
+    );
     const buttons = screen.getAllByRole("button");
 
     await user.click(buttons[2]);
-
-    expect(selections[2].isFound).toBeTruthy();
-    expect(selections[1].fn).not.toHaveBeenCalled();
-
+    expect(testObj).toBe(luffy);
     await user.click(buttons[0]);
+    expect(testObj).toBe(selections[0]);
+    expect(testObj).not.toBe(luffy);
     await user.click(buttons[1]);
-
-    expect(selections[0].fn).toHaveBeenCalled();
-    expect(selections[1].fn).toHaveBeenCalled();
+    expect(testObj).toBe(selections[1]);
+    expect(testObj).not.toBe(selections[0]);
   });
 
   it("Doesn't render the button of a found character", async () => {
     const { rerender } = render(
-      <ClickOptions selections={selections} position={{}} />
+      <ClickOptions
+        selections={selections}
+        position={{}}
+        handleClick={handleClick2}
+      />
     );
     const luffyBtn = screen.getByRole("button", { name: "Luffy" });
     let buttons = screen.getAllByRole("button");
@@ -66,7 +128,13 @@ describe("ClickOptions component", () => {
     expect(buttons).toHaveLength(3);
 
     await user.click(luffyBtn);
-    rerender(<ClickOptions selections={selections} position={{}} />);
+    rerender(
+      <ClickOptions
+        selections={selections}
+        position={{}}
+        handleClick={handleClick2}
+      />
+    );
     buttons = screen.getAllByRole("button");
 
     expect(
@@ -74,5 +142,6 @@ describe("ClickOptions component", () => {
     ).not.toBeInTheDocument();
     expect(buttons).toHaveLength(2);
   });
+
   afterEach(() => selections.pop());
 });

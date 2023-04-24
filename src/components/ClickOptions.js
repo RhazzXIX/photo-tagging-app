@@ -1,7 +1,7 @@
 import "../styles/ClickOptions.css";
 
 const ClickOptions = (props) => {
-  const { selections, position } = props;
+  const { selections, position, handleClick } = props;
 
   let posY = 5;
   let posX = 5;
@@ -23,7 +23,7 @@ const ClickOptions = (props) => {
         if (character.isFound) return null;
         return (
           <li key={character.id}>
-            <button onClick={() => character.checkPosn()}>
+            <button onClick={handleClick.bind(character)}>
               {character.name}
             </button>
           </li>
