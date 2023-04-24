@@ -3,6 +3,7 @@ import useGameData from "../assists/useGameData";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ClickOptions from "./ClickOptions";
+import parseToTimer from "../assists/parseToTimer";
 
 export default function Game(props) {
   const { gameVer } = useParams();
@@ -11,26 +12,14 @@ export default function Game(props) {
   const [showButtons, setShowButtons] = useState(false);
   const [targetPosX, setTargetPosX] = useState(915);
   const [targetPosY, setTargetPosY] = useState(440);
-  const [timer, setTimer] = useState(0);
+  const [countTime, setCountTime] = useState(0);
   const [runTimer, setRunTimer] = useState(false);
+  const [gameMap, setGameMap] = useState({});
+  const [charSelection, setCharSelection] = useState([]);
+  const [notice, setNotice] = useState("");
+  const [showNotice, setShowNotice] = useState(false);
 
   const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
-
-  let map, charSelection;
-
-  switch (gameVer) {
-    case "animeX":
-      map = firstMap;
-      charSelection = charSelection1;
-      break;
-    case "gameX":
-      map = scndMap;
-      charSelection = charSelection2;
-      break;
-    default:
-      map = null;
-      charSelection = null;
-  }
 
   const editLoading = () => {
     switch (loading) {
@@ -50,7 +39,7 @@ export default function Game(props) {
     setRunTimer(true);
   };
 
-  const handleClick = (e) => {
+  const getPosition = (e) => {
     const xPos = e.nativeEvent.offsetX;
     const yPos = e.nativeEvent.offsetY;
     setTargetPosX(xPos);
@@ -69,6 +58,16 @@ export default function Game(props) {
   //   setTargetPosY(yPos)
   // }
 
+  async function selectChar(e) {
+    let message = `${this.name} was not found`;
+    await this.checkPosn(targetPosX, targetPosY);
+    if (this.isFound) {
+      message = `You found ${this.name}`;
+    }
+    setNotice(message);
+    setShowNotice(true);
+  }
+
   useEffect(() => {
     const editLoadingInterval = setInterval(() => {
       editLoading();
@@ -80,32 +79,47 @@ export default function Game(props) {
   }, [loading]);
 
   useEffect(() => {
+    switch (gameVer) {
+      case "animeX":
+        setGameMap(firstMap);
+        setCharSelection(charSelection1);
+        break;
+      case "gameX":
+        setGameMap(scndMap);
+        setCharSelection(charSelection2);
+        break;
+      default:
+        setGameMap({});
+        setCharSelection([]);
+    }
+  }, [firstMap, scndMap, charSelection1, charSelection2]);
+
+  useEffect(() => {
+    if (showNotice) setTimeout(() => setShowNotice(false), 3000);
+  }, [showNotice]);
+
+  useEffect(() => {
     let gameTimer;
     if (runTimer) {
       gameTimer = setInterval(() => {
-        setTimer(timer + 1);
+        setCountTime(countTime + 1);
       }, 1);
     }
     if (!runTimer) clearInterval(gameTimer);
     return () => {
       clearInterval(gameTimer);
     };
-  }, [timer, runTimer]);
+  }, [countTime, runTimer]);
+
+  const { minutes, seconds, milliSeconds } = parseToTimer(countTime);
 
   return (
     <main id="game">
       <header>
         <div className="timer">
-          <p>{Math.floor(timer / 1000 / 60)}m</p>
-          <p>
-            {Math.floor(
-              (timer / 1000 / 60 - Math.floor(timer / 1000 / 60)) * 60
-            )}
-            s
-          </p>
-          <p>
-            {Math.floor((timer / 1000 - Math.floor(timer / 1000)) * 1000)}ms
-          </p>
+          <p>{minutes}m</p>
+          <p>{seconds}s</p>
+          <p>{milliSeconds}ms</p>
         </div>
         <ul>
           {charSelection &&
@@ -130,15 +144,16 @@ export default function Game(props) {
               );
             })}
         </ul>
+        {showNotice && <h2>{notice}</h2>}
       </header>
-      {map && (
+      {gameMap && (
         <section
           id="map"
-          onClick={handleClick}
+          onClick={getPosition}
           data-testid="map"
           //  onMouseOver={getMousePosition}
         >
-          <img src={map.url} alt={map.name} />
+          <img src={gameMap.url} alt={gameMap.name} />
           {/* <div
             id="target"
             style={{
@@ -151,6 +166,7 @@ export default function Game(props) {
             <ClickOptions
               selections={charSelection}
               position={{ targetPosX, targetPosY }}
+              handleClick={selectChar}
             />
           )}
         </section>

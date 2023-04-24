@@ -25,6 +25,12 @@ exports[`Game component Renders on screen 1`] = `
       <ul />
     </header>
     <section
+      data-testid="map"
+      id="map"
+    >
+      <img />
+    </section>
+    <section
       id="loading"
     >
       <h1>

@@ -1,5 +1,11 @@
 import "@testing-library/jest-dom";
-import { screen, render, waitFor, fireEvent } from "@testing-library/react";
+import {
+  screen,
+  render,
+  waitFor,
+  fireEvent,
+  getByRole,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Game from "../components/Game";
 import useGameData from "../assists/useGameData";
@@ -28,16 +34,28 @@ const fetchedData = {
       name: 'Yato "Yaboku"',
       url: "yato url",
       id: 1,
+      checkPosn() {
+        this.isFound = true;
+      },
+      isFound: false,
     },
     {
       name: 'ELUCIA"',
       url: "elucia url",
       id: 2,
+      checkPosn() {
+        this.isFound = true;
+      },
+      isFound: false,
     },
     {
       name: 'EVANS"',
       url: "evans url",
       id: 3,
+      checkPosn() {
+        this.isFound = true;
+      },
+      isFound: false,
     },
   ],
   charSelection2: [
@@ -45,16 +63,28 @@ const fetchedData = {
       name: "Spyro",
       url: "spyro url",
       id: 4,
+      checkPosn() {
+        this.isFound = true;
+      },
+      isFound: false,
     },
     {
       name: 'Arthur"',
       url: "arthur url",
       id: 5,
+      checkPosn() {
+        this.isFound = true;
+      },
+      isFound: false,
     },
     {
       name: 'Marco"',
       url: "marco url",
       id: 6,
+      checkPosn() {
+        this.isFound = true;
+      },
+      isFound: false,
     },
   ],
 };
@@ -71,26 +101,9 @@ describe("Game component", () => {
 
     expect(container).toMatchSnapshot();
   });
-  it("Loading section is removed after the game is loaded", async () => {
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/game", "/game/gameX"],
-      initialIndex: 1,
-    });
-    render(<RouterProvider router={router} />);
-    expect(
-      screen.getByRole("heading", { name: /loading/i })
-    ).toBeInTheDocument();
-    const marcoImg = screen.getByAltText(/marco/i);
 
-    fireEvent.load(marcoImg);
-
-    expect(
-      screen.queryByRole("heading", { name: /loading/i })
-    ).not.toBeInTheDocument();
-  });
-
-  describe("Loads the selected game version", () => {
-    it("Loads the Anime Crossover verions", () => {
+  describe("Loads the selected game versions", () => {
+    it("Loads the Anime Crossover version", () => {
       const router = createMemoryRouter(routes, {
         initialEntries: ["/game/animeX"],
       });
@@ -105,7 +118,7 @@ describe("Game component", () => {
       expect(screen.getByAltText(/anime crossover/i)).toBeInTheDocument();
     });
 
-    it("Loads the Game Crossover verions", () => {
+    it("Loads the Game Crossover version", () => {
       const router = createMemoryRouter(routes, {
         initialEntries: ["/game/gameX"],
       });
@@ -121,59 +134,130 @@ describe("Game component", () => {
     });
   });
 
-  it("Starts the time after the game loads", async () => {
-    let delay = 0;
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/game/gameX"],
+  describe("Game loads", () => {
+    it("Loading section is removed after the game is loaded", async () => {
+      const router = createMemoryRouter(routes, {
+        initialEntries: ["/game", "/game/gameX"],
+        initialIndex: 1,
+      });
+      render(<RouterProvider router={router} />);
+      expect(
+        screen.getByRole("heading", { name: /loading/i })
+      ).toBeInTheDocument();
+      const marcoImg = screen.getByAltText(/marco/i);
+
+      fireEvent.load(marcoImg);
+
+      expect(
+        screen.queryByRole("heading", { name: /loading/i })
+      ).not.toBeInTheDocument();
+    });
+    it("Starts the timer after the game loads", async () => {
+      let delay = 0;
+      const router = createMemoryRouter(routes, {
+        initialEntries: ["/game/gameX"],
+      });
+
+      render(<RouterProvider router={router} />);
+      const ms = screen.getByText("0ms");
+      const marcoImg = screen.getByAltText(/marco/i);
+      expect(
+        screen.getByRole("heading", { name: /loading/i })
+      ).toBeInTheDocument();
+
+      await waitFor(() => {
+        if (delay === 0) {
+          delay += 1;
+          throw new Error("Did not delay");
+        }
+        expect(ms.textContent).toMatch("0ms");
+      });
+      fireEvent.load(marcoImg);
+      await waitFor(() => {
+        if (delay === 1) {
+          delay += 1;
+          throw new Error("Did not delay");
+        }
+      });
+      expect(
+        screen.queryByRole("heading", { name: /loading/i })
+      ).not.toBeInTheDocument();
+      expect(ms.textContent).not.toMatch("0ms");
     });
 
-    render(<RouterProvider router={router} />);
-    const ms = screen.getByText("0ms");
-    const marcoImg = screen.getByAltText(/marco/i);
-    expect(
-      screen.getByRole("heading", { name: /loading/i })
-    ).toBeInTheDocument();
+    describe("Playing the game", () => {
+      beforeEach(() => {
+        fetchedData.charSelection2[0].isFound = false;
+      });
 
-    await waitFor(() => {
-      if (delay === 0) {
-        delay += 1;
-        throw new Error("Did not delay");
-      }
-      expect(ms.textContent).toMatch("0ms");
+      const runGame = () => {
+        const router = createMemoryRouter(routes, {
+          initialEntries: ["/game/gameX"],
+        });
+
+        const { rerender } = render(<RouterProvider router={router} />);
+
+        const marcoImg = screen.getByAltText(/marco/i);
+
+        fireEvent.load(marcoImg);
+        return { rerender, router };
+      };
+
+      it("Reveals the character buttons when the map is clicked", async () => {
+        runGame();
+        expect(
+          screen.queryByRole("button", { name: /spyro/i })
+        ).not.toBeInTheDocument();
+        const mapSection = screen.getByTestId("map");
+        await user.click(mapSection);
+
+        expect(
+          screen.getByRole("button", { name: /spyro/i })
+        ).toBeInTheDocument();
+        expect(
+          screen.getByRole("button", { name: /arthur/i })
+        ).toBeInTheDocument();
+        expect(
+          screen.getByRole("button", { name: /marco/i })
+        ).toBeInTheDocument();
+      });
+
+      it("Inform the user that they found the character", async () => {
+        const { rerender, router } = runGame();
+
+        const mapSection = screen.getByTestId("map");
+        await user.click(mapSection);
+
+        const spyroBtn = screen.getByRole("button", { name: /spyro/i });
+
+        await user.click(spyroBtn);
+
+        rerender(<RouterProvider router={router} />);
+
+        expect(
+          screen.getByRole("heading", { level: 2, name: /you found/i })
+        ).toBeInTheDocument();
+      });
+
+      it("Inform the user if a wrong character is selected", async () => {
+        fetchedData.charSelection2[0].checkPosn = function checkPosn() {
+          this.isFound = false;
+        };
+
+        const { rerender, router } = runGame();
+
+        const mapSection = screen.getByTestId("map");
+        await user.click(mapSection);
+
+        const spyroBtn = screen.getByRole("button", { name: /spyro/i });
+
+        await user.click(spyroBtn);
+        rerender(<RouterProvider router={router} />);
+
+        expect(
+          screen.getByRole("heading", { level: 2, name: /was not found/i })
+        ).toBeInTheDocument();
+      });
     });
-    fireEvent.load(marcoImg);
-    await waitFor(() => {
-      if (delay === 1) {
-        delay += 1;
-        throw new Error("Did not delay");
-      }
-    });
-    expect(
-      screen.queryByRole("heading", { name: /loading/i })
-    ).not.toBeInTheDocument();
-    expect(ms.textContent).not.toMatch("0ms");
-  });
-
-  it("Reveals the character buttons when the map is cliked", async () => {
-    const router = createMemoryRouter(routes, {
-      initialEntries: ["/game/gameX"],
-    });
-    render(<RouterProvider router={router} />);
-
-    const marcoImg = screen.getByAltText(/marco/i);
-
-    fireEvent.load(marcoImg);
-
-    const mapSection = screen.getByTestId("map");
-    user.click(mapSection);
-
-    await waitFor(() => {
-      if (screen.getAllByRole("button").length === 0)
-        throw new Error("Buttons did not load");
-    });
-
-    expect(screen.getByRole("button", { name: /spyro/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /arthur/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /marco/i })).toBeInTheDocument();
   });
 });
