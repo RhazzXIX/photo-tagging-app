@@ -5,6 +5,9 @@ import {
   waitFor,
   fireEvent,
   getByRole,
+  findByRole,
+  waitForElementToBeRemoved,
+  act,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Game from "../components/Game";
@@ -90,6 +93,7 @@ const fetchedData = {
 };
 
 const user = userEvent.setup();
+jest.setTimeout(11000);
 
 jest.mock("../assists/useGameData", () => {
   return () => fetchedData;
@@ -195,12 +199,11 @@ describe("Game component", () => {
           initialEntries: ["/game/gameX"],
         });
 
-        const { rerender } = render(<RouterProvider router={router} />);
+        render(<RouterProvider router={router} />);
 
         const marcoImg = screen.getByAltText(/marco/i);
 
         fireEvent.load(marcoImg);
-        return { rerender, router };
       };
 
       it("Reveals the character buttons when the map is clicked", async () => {
@@ -223,7 +226,7 @@ describe("Game component", () => {
       });
 
       it("Inform the user that they found the character", async () => {
-        const { rerender, router } = runGame();
+        runGame();
 
         const mapSection = screen.getByTestId("map");
         await user.click(mapSection);
@@ -232,11 +235,14 @@ describe("Game component", () => {
 
         await user.click(spyroBtn);
 
-        rerender(<RouterProvider router={router} />);
-
         expect(
           screen.getByRole("heading", { level: 2, name: /you found/i })
         ).toBeInTheDocument();
+
+        await user.click(mapSection);
+        expect(
+          screen.queryByRole("button", { name: /spyro/i })
+        ).not.toBeInTheDocument();
       });
 
       it("Inform the user if a wrong character is selected", async () => {
@@ -244,7 +250,7 @@ describe("Game component", () => {
           this.isFound = false;
         };
 
-        const { rerender, router } = runGame();
+        runGame();
 
         const mapSection = screen.getByTestId("map");
         await user.click(mapSection);
@@ -252,11 +258,58 @@ describe("Game component", () => {
         const spyroBtn = screen.getByRole("button", { name: /spyro/i });
 
         await user.click(spyroBtn);
-        rerender(<RouterProvider router={router} />);
 
         expect(
           screen.getByRole("heading", { level: 2, name: /was not found/i })
         ).toBeInTheDocument();
+
+        await user.click(mapSection);
+        expect(
+          screen.getByRole("button", { name: /spyro/i })
+        ).toBeInTheDocument();
+      });
+
+      it("Should stop the timer when all the characters are found", async () => {
+        runGame();
+
+        const mapSection = screen.getByTestId("map");
+        let milliSeconds = screen.getByText("0ms");
+        await user.click(mapSection);
+        expect(milliSeconds.textContent).not.toBe("0ms");
+        const spyroBtn = screen.getByRole("button", { name: /spyro/i });
+        let timerSave = milliSeconds.textContent;
+        await user.click(spyroBtn);
+        await user.click(mapSection);
+        const arthurBtn = screen.getByRole("button", { name: /arthur/i });
+        await user.click(arthurBtn);
+        expect(milliSeconds.textContent).not.toBe(timerSave);
+        await user.click(mapSection);
+        const marcoBtn = screen.getByRole("button", { name: /marco/i });
+        await user.click(marcoBtn);
+        const notice = await screen.findByRole("heading", {
+          name: /you found/i,
+        });
+        timerSave = milliSeconds.textContent;
+        let isTimerTicking = true;
+        let timerStopByTimes = 0;
+        await waitFor(
+          () => {
+            if (isTimerTicking) {
+              if (timerSave === milliSeconds.textContent) {
+                if (timerStopByTimes === 5) {
+                  isTimerTicking = false;
+                }
+                timerStopByTimes += 1;
+              }
+              timerSave = milliSeconds.textContent;
+              throw new Error("Timer still ticking");
+            }
+            timerSave = milliSeconds.textContent;
+            return expect(notice).not.toBeInTheDocument();
+          },
+          { timeout: 10000, interval: 1200 }
+        );
+        expect(milliSeconds.textContent).toBe(timerSave);
       });
     });
   });

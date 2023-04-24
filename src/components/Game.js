@@ -96,16 +96,25 @@ export default function Game(props) {
 
   useEffect(() => {
     if (showNotice) setTimeout(() => setShowNotice(false), 3000);
+    if (
+      charSelection.every((char) => {
+        return char.isFound;
+      })
+    ) {
+      setRunTimer(false);
+    }
   }, [showNotice]);
 
   useEffect(() => {
     let gameTimer;
+    if (!runTimer) {
+      clearInterval(gameTimer);
+    }
     if (runTimer) {
       gameTimer = setInterval(() => {
         setCountTime(countTime + 1);
       }, 1);
     }
-    if (!runTimer) clearInterval(gameTimer);
     return () => {
       clearInterval(gameTimer);
     };
