@@ -22,18 +22,21 @@ describe("createCharObj factory function", () => {
   );
   it("Creates a character object", async () => {
     const testCharObj = createCharObj("char1", "testUrl", "testRef");
-    expect(Object.keys(testCharObj)).toHaveLength(4);
+    expect(Object.keys(testCharObj)).toHaveLength(5);
     expect(testCharObj.name).toMatch("char1");
     expect(testCharObj.id).toBeTruthy();
     expect(typeof testCharObj.id).toMatch("string");
     expect(testCharObj.url).toMatch("testUrl");
-    expect(await testCharObj.checkPosn()).toBe(false);
     expect(typeof testCharObj.checkPosn).toMatch("function");
+    expect(typeof testCharObj.isFound).toMatch("boolean");
   });
 
-  test("The char object method return true if the position entered are within the fetched position", async () => {
+  test("The object method checkPosn alters the isFound property to true if the entered position is correct", async () => {
     const testCharObj = createCharObj("char1", "testUrl", "testRef");
-    expect(await testCharObj.checkPosn(340, 570)).toBe(false);
-    expect(await testCharObj.checkPosn(360, 570)).toBe(true);
+    expect(testCharObj.isFound).toBe(false);
+    await testCharObj.checkPosn(340, 570);
+    expect(testCharObj.isFound).toBe(false);
+    await testCharObj.checkPosn(360, 570);
+    expect(testCharObj.isFound).toBe(true);
   });
 });
