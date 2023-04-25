@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecordForm component Renders on screen 1`] = `
+<div>
+  <form
+    id="record"
+  >
+    <div
+      class="timer"
+    >
+      <p>
+        Your time is:
+      </p>
+      <h4>
+        0
+        m 
+        0
+        s 
+        ms
+      </h4>
+    </div>
+    <label
+      for="name"
+    >
+      Name:
+      <input
+        id="name"
+        type="text"
+      />
+    </label>
+    <button
+      class="submit"
+      type="submit"
+    >
+      Submit
+    </button>
+  </form>
+</div>
+`;
