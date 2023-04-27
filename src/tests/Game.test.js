@@ -4,15 +4,13 @@ import {
   render,
   waitFor,
   fireEvent,
-  getByRole,
-  findByRole,
   waitForElementToBeRemoved,
-  act,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Game from "../components/Game";
 import useGameData from "../assists/useGameData";
 import { RouterProvider, createMemoryRouter } from "react-router-dom";
+import { signInAnonymously } from "firebase/auth";
 
 const routes = [
   {
@@ -99,7 +97,26 @@ jest.mock("../assists/useGameData", () => {
   return () => fetchedData;
 });
 
+jest.mock("firebase/auth", () => {
+  const originalModule = jest.requireActual("firebase/auth");
+
+  return {
+    __esModule: true,
+    ...originalModule,
+
+    signInAnonymously: jest.fn(() => Promise.resolve({})),
+  };
+});
+
 describe("Game component", () => {
+  beforeEach(() => {
+    Object.keys(fetchedData.charSelection1).forEach((keys, i) => {
+      fetchedData.charSelection1[keys].isFound = false;
+    });
+    Object.keys(fetchedData.charSelection2).forEach((keys, i) => {
+      fetchedData.charSelection2[keys].isFound = false;
+    });
+  });
   it("Renders on screen", () => {
     const { container } = render(<Game />);
 
@@ -310,6 +327,30 @@ describe("Game component", () => {
           { timeout: 10000, interval: 1200 }
         );
         expect(milliSeconds.textContent).toBe(timerSave);
+      });
+
+      it("Shows the form entry after the game", async () => {
+        Object.keys(fetchedData.charSelection2).forEach((keys, i) => {
+          if (i === 2) return;
+          fetchedData.charSelection2[keys].isFound = true;
+        });
+
+        runGame();
+
+        const mapSection = screen.getByTestId("map");
+        await user.click(mapSection);
+
+        const marcoBtn = screen.getByRole("button");
+        await user.click(marcoBtn);
+
+        await waitFor(
+          () => {
+            if (!screen.getByRole("button", { name: /submit/i }))
+              throw new Error("Form did not appear");
+            return expect(screen.getByLabelText("Name:")).toBeInTheDocument();
+          },
+          { timeout: 5000 }
+        );
       });
     });
   });

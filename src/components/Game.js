@@ -1,12 +1,15 @@
 import "../styles/Game.css";
+import { signInAnonymously, signOut } from "firebase/auth";
+import { auth } from "../assists/fbConfig";
 import useGameData from "../assists/useGameData";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ClickOptions from "./ClickOptions";
+import RecordForm from "./RecordForm";
 import parseToTimer from "../assists/parseToTimer";
 
 export default function Game(props) {
-  const { gameVer } = useParams();
+  // State & params
   const [showLoading, setShowLoading] = useState(true);
   const [loading, setLoading] = useState("Loading.");
   const [showButtons, setShowButtons] = useState(false);
@@ -18,9 +21,13 @@ export default function Game(props) {
   const [charSelection, setCharSelection] = useState([]);
   const [notice, setNotice] = useState("");
   const [showNotice, setShowNotice] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+  const { gameVer } = useParams();
 
+  // custom Hook
   const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
 
+  // Loading
   const editLoading = () => {
     switch (loading) {
       case "Loading.":
@@ -39,6 +46,7 @@ export default function Game(props) {
     setRunTimer(true);
   };
 
+  // Game
   const getPosition = (e) => {
     const xPos = e.nativeEvent.offsetX;
     const yPos = e.nativeEvent.offsetY;
@@ -51,13 +59,6 @@ export default function Game(props) {
     setShowButtons(true);
   };
 
-  // const getMousePosition = (e) => {
-  //   const xPos = e.nativeEvent.offsetX
-  //   const yPos = e.nativeEvent.offsetY
-  //   setTargetPosX(xPos)
-  //   setTargetPosY(yPos)
-  // }
-
   async function selectChar(e) {
     let message = `${this.name} was not found`;
     await this.checkPosn(targetPosX, targetPosY);
@@ -68,6 +69,28 @@ export default function Game(props) {
     setShowNotice(true);
   }
 
+  // const getMousePosition = (e) => {
+  //   const xPos = e.nativeEvent.offsetX
+  //   const yPos = e.nativeEvent.offsetY
+  //   setTargetPosX(xPos)
+  //   setTargetPosY(yPos)
+  // }
+
+  // Effects
+  //Sign-In
+  useEffect(() => {
+    try {
+      signInAnonymously(auth);
+    } catch (err) {
+      console.log(err);
+    }
+
+    return () => {
+      signOut(auth);
+    };
+  }, []);
+
+  //Loading
   useEffect(() => {
     const editLoadingInterval = setInterval(() => {
       editLoading();
@@ -78,6 +101,7 @@ export default function Game(props) {
     };
   }, [loading]);
 
+  //Setting game version
   useEffect(() => {
     switch (gameVer) {
       case "animeX":
@@ -94,17 +118,24 @@ export default function Game(props) {
     }
   }, [firstMap, scndMap, charSelection1, charSelection2]);
 
+  // Showing notice
   useEffect(() => {
     if (showNotice) setTimeout(() => setShowNotice(false), 3000);
-    if (
-      charSelection.every((char) => {
-        return char.isFound;
-      })
-    ) {
+    let allFound;
+    if (charSelection.length)
+      allFound = charSelection.every((char) => {
+        if (!char) return;
+        return char.isFound === true;
+      });
+    if (allFound) {
       setRunTimer(false);
+      setTimeout(() => {
+        setShowForm(true);
+      }, 2000);
     }
   }, [showNotice]);
 
+  // Running Timer
   useEffect(() => {
     let gameTimer;
     if (!runTimer) {
@@ -120,7 +151,8 @@ export default function Game(props) {
     };
   }, [countTime, runTimer]);
 
-  const { minutes, seconds, milliSeconds } = parseToTimer(countTime);
+  // Timer conversion
+  const { minutes, seconds, milliseconds } = parseToTimer(countTime);
 
   return (
     <main id="game">
@@ -128,7 +160,7 @@ export default function Game(props) {
         <div className="timer">
           <p>{minutes}m</p>
           <p>{seconds}s</p>
-          <p>{milliSeconds}ms</p>
+          <p>{milliseconds}ms</p>
         </div>
         <ul>
           {charSelection &&
@@ -180,6 +212,7 @@ export default function Game(props) {
           )}
         </section>
       )}
+      {showForm && <RecordForm time={countTime} gameVer={gameVer} />}
       {showLoading && (
         <section id="loading">
           <h1>{loading}</h1>
