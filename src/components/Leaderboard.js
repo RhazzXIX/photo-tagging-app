@@ -1,6 +1,15 @@
 import parseToTimer from "../assists/parseToTimer";
 import useGameData from "../assists/useGameData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  getDocs,
+  query,
+  collection,
+  limit,
+  orderBy,
+  where,
+} from "firebase/firestore";
+import { database } from "../assists/fbConfig";
 
 export default function Leaderboard({ gameVer }) {
   const [game, setGame] = useState("Anime Crossover");
@@ -13,6 +22,44 @@ export default function Leaderboard({ gameVer }) {
 
     return `${minutes}m ${seconds}s ${milliseconds}ms`;
   };
+
+  const getRecordList = async (game) => {
+    const recordItems = [];
+
+    let version;
+    switch (game) {
+      case "Anime Crossover":
+        version = "animeX";
+        break;
+      case "Game Crossover":
+        version = "gameX";
+        break;
+      default:
+        version = null;
+        break;
+    }
+
+    const queryRef = query(
+      collection(database, "leaderBoard"),
+      where("version", "==", version),
+      orderBy("time", "asc"),
+      limit(100)
+    );
+    let querySnapshot;
+    await getDocs(queryRef)
+      .then((resp) => {
+        querySnapshot = resp;
+      })
+      .catch((e) => console.log(e));
+    querySnapshot.forEach((doc) => {
+      recordItems.push(doc.data());
+    });
+    setRecordList(recordItems);
+  };
+
+  useEffect(() => {
+    getRecordList(game);
+  }, [game]);
 
   return (
     <main id="LeaderBoard">
@@ -30,9 +77,8 @@ export default function Leaderboard({ gameVer }) {
         <h4>Time:</h4>
         <ol>
           {recordList.map((record, i) => {
-            const key = Object.keys(recordList);
             return (
-              <li key={key[i]}>
+              <li key={record.id}>
                 <p>{record.userName}</p>
                 <p>{timeToString(record.time)}</p>
               </li>
