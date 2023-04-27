@@ -2,41 +2,45 @@
 
 exports[`RecordForm component Renders on screen 1`] = `
 <div>
-  <form
-    id="record"
+  <section
+    class="form"
   >
-    <div
-      class="timer"
+    <form
+      id="record"
     >
-      <p>
-        Your time is:
-      </p>
-      <h4>
-        0
-        m 
-        0
-        s 
-        0
-        ms
-      </h4>
-    </div>
-    <label
-      for="name"
-    >
-      Name:
-      <input
-        id="name"
-        required=""
-        type="text"
-        value=""
-      />
-    </label>
-    <button
-      class="submit"
-      type="submit"
-    >
-      Submit
-    </button>
-  </form>
+      <div
+        class="timer"
+      >
+        <p>
+          Your time is:
+        </p>
+        <h4>
+          0
+          m 
+          0
+          s 
+          0
+          ms
+        </h4>
+      </div>
+      <label
+        for="name"
+      >
+        Name:
+        <input
+          id="name"
+          required=""
+          type="text"
+          value=""
+        />
+      </label>
+      <button
+        class="submit"
+        type="submit"
+      >
+        Submit
+      </button>
+    </form>
+  </section>
 </div>
 `;
