@@ -1,6 +1,6 @@
 import "../styles/RecordForm.css";
 import parseToTimer from "../assists/parseToTimer";
-import { setDoc, doc, updateDoc, getDoc } from "firebase/firestore";
+import { setDoc, doc, collection } from "firebase/firestore";
 import { database } from "../assists/fbConfig";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,29 +14,18 @@ export default function RecordForm(props) {
   async function sendDocs(e) {
     e.preventDefault();
     if (!recordSent) {
-      let totalRecord;
-      const docRef = doc(database, "leaderBoard", gameVer);
-      const leaderBoard = await getDoc(docRef).then((response) =>
-        response.data()
-      );
+      const docRef = doc(collection(database, "leaderBoard"));
 
-      if (!leaderBoard) {
-        totalRecord = 0;
-      } else {
-        totalRecord = Object.keys(leaderBoard).length;
-      }
+      const playerRecord = { userName, time, id: docRef.id, version: gameVer };
 
-      const playerRecord = {
-        [`record${totalRecord}`]: { userName, time },
-      };
-
-      if (!leaderBoard) {
-        await setDoc(docRef, playerRecord);
-      } else {
-        await updateDoc(docRef, playerRecord);
-      }
-      setRecordSent(true);
-      navigate("/photo-tagging-app/leaderboard");
+      await setDoc(docRef, playerRecord)
+        .then(() => {
+          setRecordSent(true);
+          navigate("/photo-tagging-app/leaderboard");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
 

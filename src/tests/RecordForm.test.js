@@ -2,7 +2,7 @@ import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import RecordForm from "../components/RecordForm";
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, collection } from "firebase/firestore";
 import {
   BrowserRouter,
   RouterProvider,
@@ -16,13 +16,16 @@ jest.mock("firebase/firestore", () => {
     __esModile: true,
     ...originalModule,
     doc: jest.fn(),
-    setDoc: jest.fn((obj) => true),
-    getDoc: jest.fn(),
+    setDoc: jest.fn(),
+    collection: jest.fn(),
   };
 });
 
 const user = userEvent.setup();
-const docRef = "testRef";
+const docRef = {
+  id: "testRef",
+};
+const colRef = "colRef";
 
 describe("RecordForm component", () => {
   it("Renders on screen", () => {
@@ -68,9 +71,8 @@ describe("RecordForm component", () => {
   describe("Sending record", () => {
     beforeEach(() => {
       doc.mockReturnValue(docRef);
-      getDoc.mockResolvedValue({
-        data() {},
-      });
+      collection.mockReturnValue(colRef);
+      setDoc.mockResolvedValue(true);
     });
 
     it("Lets users submit their record", async () => {
@@ -87,20 +89,19 @@ describe("RecordForm component", () => {
 
       await user.click(submitBtn);
 
-      expect(doc).toHaveBeenCalled();
-      expect(doc.mock.calls[0][1]).toBe("leaderBoard");
-      expect(doc.mock.calls[0][2]).toBe("animeX");
+      expect(collection).toHaveBeenCalled();
+      expect(collection.mock.calls[0][1]).toBe("leaderBoard");
 
-      expect(getDoc).toHaveBeenCalled();
-      expect(getDoc.mock.calls[0][0]).toBe("testRef");
+      expect(doc).toHaveBeenCalled();
+      expect(doc.mock.calls[0][0]).toBe("colRef");
 
       expect(setDoc).toHaveBeenCalled();
-      expect(setDoc.mock.calls[0][0]).toBe("testRef");
-      expect(setDoc.mock.calls[0][1]).toEqual({
-        record0: {
-          userName: "Juan",
-          time: 5500,
-        },
+      expect(setDoc.mock.calls[0][0]).toBe(docRef);
+      expect(setDoc.mock.calls[0][1]).toMatchObject({
+        userName: "Juan",
+        time: 5500,
+        id: docRef.id,
+        version: "animeX",
       });
     });
 
@@ -118,14 +119,14 @@ describe("RecordForm component", () => {
 
       await user.click(submitBtn);
 
+      expect(collection).toHaveBeenCalled();
       expect(doc).toHaveBeenCalled();
-      expect(getDoc).toHaveBeenCalled();
       expect(setDoc).toHaveBeenCalled();
 
       await user.click(submitBtn);
 
       expect(doc).toBeCalledTimes(1);
-      expect(getDoc).toBeCalledTimes(1);
+      expect(collection).toBeCalledTimes(1);
       expect(setDoc).toBeCalledTimes(1);
     });
 
