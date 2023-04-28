@@ -1,3 +1,4 @@
+import '../styles/Leaderboard.css'
 import parseToTimer from "../assists/parseToTimer";
 import useGameData from "../assists/useGameData";
 import { useEffect, useState } from "react";
@@ -72,7 +73,7 @@ export default function Leaderboard({ gameVer }) {
   }, [game]);
 
   return (
-    <main id="LeaderBoard">
+    <main id="leaderBoard">
       <header>
         <button data-game={firstMap.name} onClick={showLeaderBoard}>
           {firstMap && (
