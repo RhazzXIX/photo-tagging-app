@@ -6,15 +6,21 @@ exports[`Leaderboard component Renders on screen 1`] = `
     id="LeaderBoard"
   >
     <header>
-      <button>
+      <button
+        data-game="Anime Crossover"
+      >
         <img
           alt="Anime Crossover"
+          data-game="Anime Crossover"
           src="mini url 1"
         />
       </button>
-      <button>
+      <button
+        data-game="Game Crossover"
+      >
         <img
           alt="Game Crossover"
+          data-game="Game Crossover"
           src="mini url 2"
         />
       </button>
@@ -25,6 +31,9 @@ exports[`Leaderboard component Renders on screen 1`] = `
     <section
       class="list"
     >
+      <h4>
+        Rank:
+      </h4>
       <h4>
         Name:
       </h4>

@@ -1,5 +1,5 @@
 import "@testing-library/jest-dom";
-import { screen, render } from "@testing-library/react";
+import { screen, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Leaderboard from "../components/Leaderboard";
 import useGameData from "../assists/useGameData";
@@ -84,21 +84,28 @@ jest.mock("../assists/useGameData", () => {
 });
 
 describe("Leaderboard component", () => {
-  it("Renders on screen", () => {
+  beforeEach(() => {
+    getDocs
+      .mockResolvedValue(fetchedAnimeData)
+  });
+
+  it("Renders on screen", async () => {
     const { container } = render(<Leaderboard />);
+    await screen.findByAltText("Anime Crossover");
     expect(container).toMatchSnapshot();
   });
 
-  it("Renders the fetched images", () => {
+  it("Renders the fetched images", async () => {
     render(<Leaderboard />);
 
-    expect(screen.getByAltText("Anime Crossover")).toBeInTheDocument();
+    await waitFor(() => {
+      return expect(screen.getByAltText("Anime Crossover")).toBeInTheDocument();
+    });
     expect(screen.getByAltText("Game Crossover")).toBeInTheDocument();
   });
-  describe("Fething game records", () => {
-    it.only("Initially fetches the Anime Crossover records", async () => {
-      query.mockReturnValue("Anime Crossover");
-      getDocs.mockResolvedValue(fetchedAnimeData);
+
+  describe("Fetching game records", () => {
+    it("Initially fetches the Anime Crossover records", async () => {
       render(<Leaderboard />);
 
       expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
@@ -106,7 +113,7 @@ describe("Leaderboard component", () => {
       );
 
       expect(where).toHaveBeenCalled();
-      expect(where.mock.calls[0][2]).toBe("animeX");
+      expect(where.mock.calls[1][2]).toBe("animeX");
       expect(query).toHaveBeenCalled();
       expect(getDocs).toHaveBeenCalled();
 
@@ -117,7 +124,10 @@ describe("Leaderboard component", () => {
       expect(screen.getByText(/test2a/i)).toBeInTheDocument();
     });
 
-    it.skip("Fetches the Game Crossover records", async () => {
+    it("Fetches the Game Crossover records", async () => {
+      getDocs.mockResolvedValueOnce(fetchedAnimeData);
+      getDocs.mockResolvedValueOnce(fetchedAnimeData);
+      getDocs.mockResolvedValueOnce(fetchedGameData);
       render(<Leaderboard />);
 
       expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
@@ -130,11 +140,11 @@ describe("Leaderboard component", () => {
       expect(screen.getByRole("heading", { level: 1 }).textContent).toBe(
         "Game Crossover"
       );
-      const listItems = screen.getAllByRole("list");
-
-      console.log(listItems);
+      const listItems = screen.getAllByRole("listitem");
 
       expect(listItems.length).toBe(2);
+      expect(screen.getByText(/test1g/i)).toBeInTheDocument();
+      expect(screen.getByText(/test2g/i)).toBeInTheDocument();
     });
   });
 });

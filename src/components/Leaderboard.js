@@ -12,7 +12,7 @@ import {
 import { database } from "../assists/fbConfig";
 
 export default function Leaderboard({ gameVer }) {
-  const [game, setGame] = useState("Anime Crossover");
+  const [game, setGame] = useState("");
   const [recordList, setRecordList] = useState([]);
 
   const { firstMap, scndMap } = useGameData();
@@ -24,7 +24,7 @@ export default function Leaderboard({ gameVer }) {
   };
 
   const getRecordList = async (game) => {
-    const recordItems = [];
+    const fetchedRecords = [];
 
     let version;
     switch (game) {
@@ -52,10 +52,20 @@ export default function Leaderboard({ gameVer }) {
       })
       .catch((e) => console.log(e));
     querySnapshot.forEach((doc) => {
-      recordItems.push(doc.data());
+      const fetchedData = doc.data();
+      fetchedRecords.push(fetchedData);
     });
-    setRecordList(recordItems);
+
+    setRecordList(fetchedRecords);
   };
+
+  const showLeaderBoard = (e) => {
+    setGame(e.target.dataset.game);
+  };
+
+  useEffect(() => {
+    setGame("Anime Crossover");
+  }, []);
 
   useEffect(() => {
     getRecordList(game);
@@ -64,19 +74,32 @@ export default function Leaderboard({ gameVer }) {
   return (
     <main id="LeaderBoard">
       <header>
-        <button>
-          {firstMap && <img src={firstMap.miniUrl} alt={firstMap.name} />}
+        <button data-game={firstMap.name} onClick={showLeaderBoard}>
+          {firstMap && (
+            <img
+              src={firstMap.miniUrl}
+              alt={firstMap.name}
+              data-game={firstMap.name}
+            />
+          )}
         </button>
-        <button>
-          {scndMap && <img src={scndMap.miniUrl} alt={scndMap.name} />}
+        <button data-game={scndMap.name} onClick={showLeaderBoard}>
+          {scndMap && (
+            <img
+              src={scndMap.miniUrl}
+              alt={scndMap.name}
+              data-game={scndMap.name}
+            />
+          )}
         </button>
       </header>
       <h1>{game}</h1>
       <section className="list">
+        <h4>Rank:</h4>
         <h4>Name:</h4>
         <h4>Time:</h4>
         <ol>
-          {recordList.map((record, i) => {
+          {recordList.map((record) => {
             return (
               <li key={record.id}>
                 <p>{record.userName}</p>
