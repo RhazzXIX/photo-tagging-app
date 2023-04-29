@@ -3,39 +3,37 @@ div#root {
   width: 100vw;
   display: flex;
   flex-direction: column;
+  min-width: max-content;
+  overflow-x: hidden;
 }
 
 div#root > header,
 div#root > footer {
-  background-color: black;
+  background-color: #060e06;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  height: 52px;
+  min-height: 52px;
 }
 
-div#root > header
-a {
+div#root > header a {
   text-decoration: none;
   color: white;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: 1.3rem;
   border-radius: 8px;
   padding: 4px 8px;
 }
 
-div#root > header
-a:hover {
+div#root > header a:hover {
   border: 1px solid white;
 }
 
-div#root > header
-a:active {
-  color: black;
+div#root > header a:active {
+  color: #060e06;
   background-color: white;
 }
 
-div#root > footer
-img:hover {
-  filter: drop-shadow(0 0 4px white)
+div#root > footer img:hover {
+  filter: drop-shadow(0 0 4px white);
 }

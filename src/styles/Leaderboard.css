@@ -3,9 +3,10 @@ main#leaderBoard {
   display: flex;
   align-items: center;
   flex-direction: column;
-  background-color: #2b2c5a;
+  background-color: #22107f;
   gap: 12px;
   min-height: 836px;
+  color: #b8cdf8;
 }
 
 main#leaderBoard > header {
@@ -21,7 +22,7 @@ main#leaderBoard > header button {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #2b2c5a;
+  background-color: #22107f;
 }
 
 main#leaderBoard > header img {
@@ -29,6 +30,7 @@ main#leaderBoard > header img {
   height: auto;
   border-radius: 8px;
   box-shadow: 0 0 4px black;
+  cursor: pointer;
 }
 
 main#leaderBoard > header img:hover {
@@ -45,9 +47,7 @@ main#leaderBoard > section {
   grid-template-columns: 80px 1fr 1fr;
 }
 
-main#leaderBoard > section
-h4:nth-of-type(3)
-{
+main#leaderBoard > section h4:nth-of-type(3) {
   margin-left: 14px;
 }
 

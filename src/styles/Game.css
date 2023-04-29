@@ -1,6 +1,6 @@
 main#game {
   flex: auto;
-  background-color: #2b2c5a;
+  background-color: #22107f;
   min-width: 1840px;
   min-height: 1142px;
   display: flex;
@@ -38,7 +38,7 @@ main#game > header div.timer {
   display: flex;
   align-items: center;
   gap: 4px;
-  color: #2b2c5a;
+  color: #22107f;
   font-size: 1.8rem;
   font-weight: 700;
   margin-left: 20px;
@@ -77,7 +77,7 @@ main#game > header h2 {
   background-color: rgba(255, 255, 0, 0.4);
   padding: 12px;
   border-radius: 4px;
-  color: #2b2c5a;
+  color: #22107f;
   font-weight: 700;
 }
 
