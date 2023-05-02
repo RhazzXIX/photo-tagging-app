@@ -5,14 +5,22 @@ import { getDoc, doc } from "firebase/firestore";
 import createMapObj from "../assists/createMapObj";
 import createCharObj from "./createCharObj";
 
-export default function useGameData(props) {
+export default function useGameData(version) {
   const [firstMap, setFirstMap] = useState({});
   const [scndMap, setScndMap] = useState({});
   const [charSelection1, setCharSelection1] = useState([]);
   const [charSelection2, setCharSelection2] = useState([]);
 
-  const selection1Ref = doc(database, "game", "anime");
-  const selection2Ref = doc(database, "game", "game");
+  let game1 = "anime";
+  let game2 = "game";
+
+  if (version === "kids") {
+    game1 = "peppa";
+    game2 = "roboPoli";
+  }
+
+  const selection1Ref = doc(database, "game", game1);
+  const selection2Ref = doc(database, "game", game2);
 
   const getData = async () => {
     const charSelection1Data = [];
