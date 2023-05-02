@@ -3,7 +3,7 @@
 exports[`Leaderboard component Renders on screen 1`] = `
 <div>
   <main
-    id="LeaderBoard"
+    id="leaderBoard"
   >
     <header>
       <button

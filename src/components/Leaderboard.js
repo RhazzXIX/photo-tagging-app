@@ -1,4 +1,4 @@
-import '../styles/Leaderboard.css'
+import "../styles/Leaderboard.css";
 import parseToTimer from "../assists/parseToTimer";
 import useGameData from "../assists/useGameData";
 import { useEffect, useState } from "react";
@@ -12,11 +12,11 @@ import {
 } from "firebase/firestore";
 import { database } from "../assists/fbConfig";
 
-export default function Leaderboard({ gameVer }) {
+export default function Leaderboard({ version }) {
   const [game, setGame] = useState("");
   const [recordList, setRecordList] = useState([]);
 
-  const { firstMap, scndMap } = useGameData();
+  const { firstMap, scndMap } = useGameData(version);
 
   const timeToString = (time) => {
     const { minutes, seconds, milliseconds } = parseToTimer(time);
@@ -27,22 +27,28 @@ export default function Leaderboard({ gameVer }) {
   const getRecordList = async (game) => {
     const fetchedRecords = [];
 
-    let version;
+    let gameVer;
     switch (game) {
       case "Anime Crossover":
-        version = "animeX";
+        gameVer = "animeX";
         break;
       case "Game Crossover":
-        version = "gameX";
+        gameVer = "gameX";
+        break;
+      case "Peppa Pig Tales":
+        gameVer = "peppaPig";
+        break;
+      case "Robocar Poli":
+        gameVer = "roboCar";
         break;
       default:
-        version = null;
+        gameVer = null;
         break;
     }
 
     const queryRef = query(
       collection(database, "leaderBoard"),
-      where("version", "==", version),
+      where("version", "==", gameVer),
       orderBy("time", "asc"),
       limit(100)
     );
@@ -65,7 +71,14 @@ export default function Leaderboard({ gameVer }) {
   };
 
   useEffect(() => {
-    setGame("Anime Crossover");
+    switch (version) {
+      case 'kids':
+        setGame("Peppa Pig Tales")
+        break;
+      default:
+        setGame("Anime Crossover");
+        break;
+    }
   }, []);
 
   useEffect(() => {

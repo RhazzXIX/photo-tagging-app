@@ -2,7 +2,6 @@ import "@testing-library/jest-dom";
 import { screen, render, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import Leaderboard from "../components/Leaderboard";
-import useGameData from "../assists/useGameData";
 import { getDocs, query, where } from "firebase/firestore";
 
 const user = userEvent.setup();
