@@ -5,11 +5,13 @@ import { database } from "../assists/fbConfig";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function RecordForm(props) {
-  const { time, gameVer } = props;
+export default function RecordForm({ time, gameVer, version }) {
   const [userName, setUserName] = useState("");
   const [recordSent, setRecordSent] = useState(false);
   const navigate = useNavigate();
+  let leaderBoardRef = "/photo-tagging-app/leaderboard";
+  if (version === "kids")
+    leaderBoardRef = "/photo-tagging-app/kids/leaderboard";
 
   async function sendDocs(e) {
     e.preventDefault();
@@ -21,7 +23,7 @@ export default function RecordForm(props) {
       await setDoc(docRef, playerRecord)
         .then(() => {
           setRecordSent(true);
-          navigate("/photo-tagging-app/leaderboard");
+          navigate(leaderBoardRef);
         })
         .catch((err) => {
           console.log(err);
