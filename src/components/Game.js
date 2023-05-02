@@ -8,7 +8,7 @@ import ClickOptions from "./ClickOptions";
 import RecordForm from "./RecordForm";
 import parseToTimer from "../assists/parseToTimer";
 
-export default function Game(props) {
+export default function Game({ version }) {
   // State & params
   const [showLoading, setShowLoading] = useState(true);
   const [loading, setLoading] = useState("Loading.");
@@ -25,7 +25,8 @@ export default function Game(props) {
   const { gameVer } = useParams();
 
   // custom Hook
-  const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
+  const { firstMap, scndMap, charSelection1, charSelection2 } =
+    useGameData(version);
 
   // Loading
   const editLoading = () => {
@@ -108,7 +109,15 @@ export default function Game(props) {
         setGameMap(firstMap);
         setCharSelection(charSelection1);
         break;
+      case "peppaPig":
+        setGameMap(firstMap);
+        setCharSelection(charSelection1);
+        break;
       case "gameX":
+        setGameMap(scndMap);
+        setCharSelection(charSelection2);
+        break;
+      case "roboCar":
         setGameMap(scndMap);
         setCharSelection(charSelection2);
         break;
@@ -212,7 +221,7 @@ export default function Game(props) {
           )}
         </section>
       )}
-      {showForm && <RecordForm time={countTime} gameVer={gameVer} />}
+      {showForm && <RecordForm time={countTime} gameVer={gameVer} version={version} />}
       {showLoading && (
         <section id="loading">
           <h1>{loading}</h1>
