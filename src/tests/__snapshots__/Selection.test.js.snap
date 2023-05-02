@@ -45,7 +45,7 @@ exports[`Selection component Renders on screen 1`] = `
         src="mini url 1"
       />
       <a
-        href="/anime"
+        href="/animeX"
       >
         <button>
           Anime Crossover
@@ -92,7 +92,7 @@ exports[`Selection component Renders on screen 1`] = `
         src="mini url 2"
       />
       <a
-        href="/game"
+        href="/gameX"
       >
         <button>
           Game Crossover

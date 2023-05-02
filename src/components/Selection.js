@@ -2,8 +2,17 @@ import { Link } from "react-router-dom";
 import useGameData from "../assists/useGameData";
 import "../styles/Selection.css";
 
-export default function Selection(props) {
-  const { firstMap, scndMap, charSelection1, charSelection2 } = useGameData();
+export default function Selection({ version }) {
+  const { firstMap, scndMap, charSelection1, charSelection2 } =
+    useGameData(version);
+
+  let gameLink1 = "animeX";
+  let gameLink2 = "gameX";
+
+  if (version === "kids") {
+    gameLink1 = "peppaPig";
+    gameLink2 = "roboCar";
+  }
 
   return (
     <main id="selection">
@@ -19,7 +28,7 @@ export default function Selection(props) {
           })}
         </ul>
         <img src={firstMap.miniUrl} alt={firstMap.name} />
-        <Link to="animeX">
+        <Link to={gameLink1}>
           <button>{firstMap.name}</button>
         </Link>
       </div>
@@ -35,7 +44,7 @@ export default function Selection(props) {
           })}
         </ul>
         <img src={scndMap.miniUrl} alt={scndMap.name} />
-        <Link to="gameX">
+        <Link to={gameLink2}>
           <button>{scndMap.name}</button>
         </Link>
       </div>
