@@ -4,14 +4,14 @@ exports[`Home component Renders on screen 1`] = `
 <div>
   <header>
     <a
-      href="/"
+      href="/photo-tagging-app"
     >
       Home
     </a>
     <a
-      href="/credits"
+      href="/leaderboard"
     >
-      Credits
+      Leaderboard
     </a>
   </header>
   <footer>
